@@ -7,52 +7,59 @@ df_basic = pd.read_excel("store/input/basic_data.xlsx")
 
 # set the "code" column as the index of the dataframe for easier retrieve rows by index
 # TODO: write your code here
+df_basic.set_index("code", inplace=True, drop=True)
 
 # convert dataframe to dictionary with the index as key and the row data as value 
 # easy access to row data by using the "code" as key
-data_basic = # TODO: complete the code
+data_basic = df_basic.to_dict(orient="index")
 
 # initialize an empty dictionary and set the variable as dataframe_building
-# TODO: write your code here
+dataframe_building = {}
 
 # iterate through each item in data_basic for easier retrieval of relevant details
 # "codes" as key and "details" as value 
-for ___  , ___ in ___: # TODO: complete the code
+for codes , details in data_basic:
 
     # Retrieve the value associated with the current "codes" key from data_basic
-    data_building = # TODO: complete the code
+    data_building = data_basics[codes]
 
     # specifies the sheet name to read and skip the first 11 rows to get the data needed 
     df_building = pd.read_excel("store/input/singland mock.xlsx", sheet_name=data_building['tab']) # TODO: complete the code
 
     # only keep columns that have value from df_building
-    df_building = # TODO: complete the code
+    df_building = df_building[['Month',
+                               'Total building energy consumption (TBEC) (kWh/month)',
+                               'Total water consumption (m3/mth)', 'No of Working days']]
     
     # rename the columns
     df_building.columns = ["date", "energy", "water", "working_day"]
 
     # convert the DataFrame to a dictionary
-    z = # TODO: complete the code
+    z = df_building.to_dict("dict")
 
     # initialize an empty list to store row indices to drop
-    row_to_drop = # TODO: complete the code
+    row_to_drop = []
 
     # iterate through the items of the "date" column in the dictionary
     # check if the value is not an instance of datetime.datetime
     # if not, append the row index to the row_to_drop list
     # TODO: write your code here
+    for keys, values in z["date"].items():
+        if not isinstance(values, datetime.datetime):
+            row_to_drop.append(keys)
         
 
     # drop the rows from the dataframe whose indices are in row_to_drop
-    df_building = # TODO: complete the code
+    df_building = df_building.drop(index=row_to_drop)
 
     # drop na/missing value based on energy and water from df_building
     # to ensure the data used for analysis is complete and accurate
     # TODO: write your code here
+    df_building.dropna(subset=["energy", "water"], inplace=True)
 
     # reset df_building index by dropping the old index
     # TODO: write your code here
-
+    df_building.reset_index(inplace=True, drop=True)
     # calculate working days within each month. Exclude every Saturday, Sunday, and public holiday
     # use the function 'calculate_working_days' which import from utility 
     df_building = # TODO: complete the code
